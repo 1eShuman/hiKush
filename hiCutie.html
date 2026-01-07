@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lavender Page</title>
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      background: linear-gradient(
+        135deg,
+        #F1D9FF 0%,
+        #C77DFF 35%,
+        #9D4EDD 70%,
+        #5A189A 100%
+      );
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Cat image */
+    .top-image {
+      max-width: 60%;
+      margin-bottom: 30px;
+      cursor: pointer;
+    }
+
+    /* Final image replaces cat */
+    .final-image {
+      max-width: 60%;
+      margin-bottom: 30px;
+      display: none;
+    }
+
+    /* Long image under cat */
+    .story-image {
+      max-width: 35%;
+      margin-top: 10px;
+      transform: translateX(-6%);
+      display: none;
+    }
+
+    /* Overlay image */
+    .overlay-image {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 110%;
+      cursor: pointer;
+      z-index: 2;
+      transition: transform 1800ms ease-in-out;
+    }
+
+    .overlay-image.fly-up {
+      transform: translate(-50%, -150vh);
+    }
+
+    /* Confetti button */
+    .confetti-btn {
+      margin-top: 25px;
+      padding: 12px 26px;
+      font-size: 16px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #9D4EDD, #7B2CBF);
+      color: white;
+      box-shadow: 0 8px 20px rgba(90, 24, 154, 0.4);
+      transition: transform 150ms ease, box-shadow 150ms ease;
+    }
+
+    .confetti-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 28px rgba(90, 24, 154, 0.55);
+    }
+
+    /* Confetti pieces */
+    .confetti {
+      position: fixed;
+      top: -10px;
+      width: 10px;
+      height: 10px;
+      opacity: 0.9;
+      animation: fall linear forwards;
+      z-index: 999;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <img src="catImage.png" class="top-image" id="cat" alt="Cat">
+    <img src="finalImage.png" class="final-image" id="final" alt="Final">
+    <img src="" class="story-image" id="story" alt="Story">
+    <img src="coverImage.png" class="overlay-image" id="overlay" alt="Cover">
+
+    <button class="confetti-btn" id="confettiBtn">💜 קונפטי</button>
+  </div>
+
+  <!-- Background Music -->
+  <audio id="bgMusic" src="music.mp3" preload="auto"></audio>
+
+  <script>
+    const overlay = document.getElementById("overlay");
+    const cat = document.getElementById("cat");
+    const finalImg = document.getElementById("final");
+    const storyImage = document.getElementById("story");
+    const confettiBtn = document.getElementById("confettiBtn");
+    const bgMusic = document.getElementById("bgMusic");
+
+    const images = [
+      "long1.png",
+      "long2.png",
+      "long3.png",
+      "long4.png",
+      "long5.png",
+      "long6.png",
+      "long7.png"
+    ];
+
+    let index = 0;
+    let musicStarted = false;
+
+    function startMusic() {
+  if (musicStarted) return;
+  musicStarted = true;
+
+  bgMusic.volume = 0.6;
+  bgMusic.loop = true;
+
+  bgMusic.currentTime = 15; // ⏱ start at 15 seconds
+  bgMusic.play();
+}
+
+    overlay.addEventListener("click", () => {
+      startMusic();
+      overlay.classList.add("fly-up");
+    });
+
+    cat.addEventListener("click", () => {
+      startMusic();
+
+      if (index < images.length) {
+        storyImage.src = images[index];
+        storyImage.style.display = "block";
+        index++;
+      } else {
+        cat.style.display = "none";
+        finalImg.style.display = "block";
+      }
+    });
+
+    // Purple confetti effect
+    confettiBtn.addEventListener("click", () => {
+      startMusic();
+
+      for (let i = 0; i < 120; i++) {
+        const confetti = document.createElement("div");
+        confetti.classList.add("confetti");
+
+        confetti.style.left = Math.random() * 100 + "vw";
+        confetti.style.backgroundColor = [
+          "#9D4EDD",
+          "#C77DFF",
+          "#E0AAFF",
+          "#7B2CBF"
+        ][Math.floor(Math.random() * 4)];
+
+        confetti.style.animationDuration =
+          Math.random() * 2 + 2 + "s";
+
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 4000);
+      }
+    });
+  </script>
+
+</body>
+</html>
